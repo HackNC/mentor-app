@@ -98,19 +98,21 @@ var respond = function(uid) {
 
 // Form handling
 var respondToRequest = function(form, uid) {
+  setUserName($(form).find('#fullname').val());
+  setUserEmail($(form).find('#email').val())
   var response = {
     'uid': getUserID(),
     'body': {
       'targetUID': uid,
-      'name': $(form).find('#fullname').text(),
-      'email': $(form).find('#email').text(),
-      'message': $(form).find('#message').text()
+      'name': getUserName(),
+      'email': getUserEmail(),
+      'message': $(form).find('#responseText').val()
     },
     'type': 'respond'
   };
   console.log(response);
   ws.send(JSON.stringify(response));
-  $('#' + uid + ' button').addClass('disabled').text('Sent!');
+  $('#' + uid + ' button').addClass('disabled').text('Sent! ');
   return false;
 }
 
