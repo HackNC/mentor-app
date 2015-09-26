@@ -151,8 +151,8 @@ var cancelResponse = function(uid) {
     'body': {
       'uid': uid
     },
-    'type': cancel
-  }
+    'type': 'cancel'
+  };
   return false;
 }
 
