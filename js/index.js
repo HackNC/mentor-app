@@ -156,8 +156,8 @@ var cancelResponse = function(uid) {
     },
     'type': 'cancel'
   };
+  ws.send(JSON.stringify(response));
   $('#' + uid + ' form').remove();
-  lockReleased(uid);
   return false;
 }
 
