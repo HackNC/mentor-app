@@ -190,8 +190,12 @@ var show = function(id) {
  */
 var init = function(){
   ws = new WebSocket(wsuri);
-  ws.onopen = function(evt){onOpen(evt);};
-  ws.onmessage = function(evt){onMessage(evt);};
+  ws.onopen = function(evt) {
+    onOpen(evt);
+  };
+  ws.onmessage = function(evt) {
+    onMessage(evt);
+  };
   setView();
 };
 
