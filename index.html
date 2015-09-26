@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>HackNC Mentor App</title>
+  <link rel="icon" href="https://www.hacknc.com/images/favicon.ico" type="image/x-icon" />
+  <!--Import bootstrap.css-->
+  <link type="text/css" rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" />
+  <link type="text/css" rel="stylesheet" href="https://www.hacknc.com/css/material-fullpalette.min.css" />
+  <!--Import HackNC overrides-->
+  <link type="text/css" rel="stylesheet" href="https://www.hacknc.com/css/hacknc.css" />
+</head>
+<body>  
+  <div id="nav-wrapper">
+    <nav id="nav" class="navbar navbar-default hacknc-navbar">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button id="toolbar-dropdown" type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href=".">HackNC <span class="sr-only">(current)</span></a>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li>
+              <a href="#all" onclick="show('all', event);">All Requests</a>
+            </li>
+            <li>
+              <a href="#me" onclick="show('me', event);">My Areas</a>
+            </li>
+            <li>
+              <a href="#setup" onclick="show('setup', event);">Setup</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </div> 
+  <div class="container">
+    <div class="row" id="all">
+      <div class="col-xs-12">
+      </div>
+    </div>
+    <div class="row" id="me">
+      <div class="col-xs-12">
+        <div class="panel panel-default">
+        </div>
+      </div>
+    </div>
+    <div class="row" id="setup">
+      <div class="col-xs-12">
+        <form class="form-horizontal" onsubmit="createNewMentor(this);" action="">
+          <fieldset>
+            <div class="form-group">
+              <label for="fullname" class="col-sm-2 control-label">Name:</label>
+              <div class="col-sm-10">
+                <input type="text" id="fullname" class="form-control validate" placeholder="Jerry Berry" />
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="email" class="col-sm-2 control-label">Email:</label>
+              <div class="col-sm-10">
+                <input type="email" class="form-control validate" id="email" placeholder="me@company.com" />
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="col-sm-10 col-sm-offset-2">
+                <button type="submit" class="btn btn-primary">Save</button> 
+              </div>
+            </div>
+          </fieldset>
+        </form>
+      </div>
+    </div>
+  </div>
+  <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+  <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="js/arrive.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.3.0/js/material.js"></script>
+  <script type="text/javascript">
+      $.material.init();
+  </script>
+  <script src="js/index.js" type="text/javascript"></script>
+</body>
+</html>
