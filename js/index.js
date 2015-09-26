@@ -86,7 +86,7 @@ var lockGranted = function(uid) {
 
 var lockDenied = function(uid) {
   console.log('lock denied');
-  $('#' + uid).css('color', 'gray');
+  $('#' + uid).css('color', 'lightgray');
   $('#' + uid + ' .btn').addClass('disabled').text('Already claimed...');
   // someone else responded to this request before you
 };
@@ -174,15 +174,18 @@ var createNewMentor = function(form) {
 var setView = function() {
   for(i = 0; i<elements.length; i++){
     if (elements[i] != current){
-      $("#" + elements[i]).hide();
+      $('#' + elements[i]).hide();
     }
   }
 };
 
-var show = function(id) {
+var show = function(id, event) {
   current = id;
   setView();
-  $("#" + id).show();
+  $('#' + id).show();
+  event.preventDefault();
+  event.stopPropagation();
+  $('#toolbar-dropdown').click();
 };
 
 /**
@@ -216,7 +219,7 @@ var intro = {
 var helpTemplate = '<div class="panel panel-default" id="{0}"><div class="panel-body"><h2>"{1}"</h2><p>"{2}"</p><a href="javascript:getResponseLock(\'{0}\');" class="btn btn-primary">Respond To This!</a></div></div>';
 
 // Claim a request template
-var responseTemplate = '<form class="form-horizontal" onsubmit="respondToRequest(this, \'{0}\');" action=""><fieldset><div class="form-group"><label for="fullname" class="col-sm-2 control-label">Name:</label><div class="col-sm-10"><input type="text" id="fullname" class="form-control validate" placeholder="Jerry Berry" value="{1}"/></div></div><div class="form-group"><label for="email" class="col-sm-2 control-label">Email:</label><div class="col-sm-10"><input type="email" class="form-control validate" id="email" placeholder="me@company.com" value="{2}"/></div></div></div><div class="form-group"><label class="col-sm-2 control-label" for="responseText">Message </label><div class="col-sm-10"><textarea class="form-control" rows"3" id="responseText">Hey! I\'d be happy to help! Email me.</textarea></div></div><div class="form-group"><div class="col-sm-10 col-sm-offset-2"><button type="submit" class="btn btn-primary">Submit</button><button type="reset" class="btn btn-warning" value="Reset">Reset</button><button type="button" onclick="cancelResponse(\'{0}\');" class="btn btn-danger">Cancel</button></div></div></fieldset></form>'
+var responseTemplate = '<form class="form-horizontal" onsubmit="respondToRequest(this, \'{0}\');" action=""><fieldset><div class="form-group"><label for="fullname" class="col-sm-2 control-label">Name:</label><div class="col-sm-10"><input type="text" id="fullname" class="form-control validate" placeholder="Jerry Berry" value="{1}"/></div></div><div class="form-group"><label for="email" class="col-sm-2 control-label">Email:</label><div class="col-sm-10"><input type="email" class="form-control validate" id="email" placeholder="me@company.com" value="{2}"/></div></div></div><div class="form-group"><label class="col-sm-2 control-label" for="responseText">Message </label><div class="col-sm-10"><textarea class="form-control" rows"3" id="responseText">Hey! I\'d be happy to help! Email me.</textarea></div></div><div class="form-group"><div class="col-sm-10 col-sm-offset-2"><button type="submit" class="btn btn-primary">Send</button><button type="reset" class="btn btn-warning" value="Reset">Reset</button><button type="button" onclick="cancelResponse(\'{0}\');" class="btn btn-danger">Cancel</button></div></div></fieldset></form>'
 
 $(document).ready(function(){
   init();
