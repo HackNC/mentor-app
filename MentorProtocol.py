@@ -12,9 +12,11 @@ class MentorProtocol(WebSocketServerProtocol):
         # print(payload.decode('utf8'))
         # Option for message headers:
         # newmentor
+        # setmentorprefs
         # help
         # helpack
-        # helpexp
+        # helpexpire
+        # helpreply
         m = ""
         try:
             #create a message object for the sender
@@ -29,10 +31,11 @@ class MentorProtocol(WebSocketServerProtocol):
 
     def onConnect(self, request):
         # Connection logic
-        print(request)
+        print("Connection Established")
 
     def onClose(self, wasClean, code, reason):
         print("connection closed")
+        Utils.handleClose(self);
 
     def onOpen(self):
         print("connection opened")
