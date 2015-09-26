@@ -54,14 +54,15 @@ var onOpen = function(event){
 };
 
 var onMessage = function(event){
+  console.log(event.data);
   var parsed = JSON.parse(event.data);
   var uid = parsed.uid;
   if (parsed.type == 'lock') {
-    if (parsed.status = 'granted') {
+    if (parsed.status == 'granted') {
       lockGranted(uid);
-    } else if (parsed.status = 'denied') {
+    } else if (parsed.status == 'denied') {
       lockDenied(uid);
-    } else if (parsed.status = 'released') {
+    } else if (parsed.status == 'released') {
       lockReleased(uid);
     } else {
       console.log('Unhandled event:');
