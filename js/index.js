@@ -48,37 +48,66 @@ var createGuid = function() {
 
 // Communication function definitions
 
-var onMessage = function(event){
-  alert(event.data);
-  var parsed = JSON.parse(event.data);
-  var uid = parsed.uid;
-  if (parsed.type == 'lockResponse') {//'lock') {
-    if (parsed.lockGranted) {
-      console.log('lock granted');
-      $('#' + uid + ' .btn').addClass('disabled').text('Claimed!');
-      var elem = responseTemplate.format(parsed.uid, getUserName(), getUserEmail());
-      $('#' + uid + ' .panel-body').append(elem);
-    } else {
-      console.log('lock rejected');
-      $('#' + uid).css('color', 'gray');
-      $('#' + uid + ' .btn').addClass('disabled').text('Already claimed...');
-      // someone else responded to this request before you
-    }
-  } else if (parsed.type == 'remove') {
-    console.log('remove ' + parsed.uid);
-    $('#' + uid).remove();
-  } else if (parsed.type == 'help') { // 'add') {
-    var elem = helpTemplate.format(parsed.uid, parsed.name, parsed.issue, parsed.uid);
-    var new_node = $(elem).hide();
-    $("#all").prepend(new_node);
-    new_node.show('normal');
-  }
-};
-
 var onOpen = function(event){
   console.log("connection opened")
   ws.send(JSON.stringify(intro));
 };
+
+var onMessage = function(event){
+  var parsed = JSON.parse(event.data);
+  var uid = parsed.uid;
+  if (parsed.type == 'lock') {
+    if (parsed.status = 'granted') {
+      lockGranted(uid);
+    } else if (parsed.status = 'denied') {
+      lockDenied(uid);
+    } else if (parsed.status = 'released') {
+      lockReleased(uid);
+    } else {
+      console.log('Unhandled event:');
+      console.log(parsed);
+    }
+  } else if (parsed.type == 'remove') {
+    removeRequest(uid);
+  } else if (parsed.type == 'add') {
+    addRequest(uid, parsed.name, parsed.issue);
+  } else {
+    // unhandled message
+  }
+};
+
+var lockGranted = function(uid) {
+  console.log('lock granted');
+  $('#' + uid + ' .btn').addClass('disabled').text('Claimed!');
+  var elem = responseTemplate.format(uid, getUserName(), getUserEmail());
+  $('#' + uid + ' .panel-body').append(elem);
+};
+
+var lockDenied = function(uid) {
+  console.log('lock rejected');
+  $('#' + uid).css('color', 'gray');
+  $('#' + uid + ' .btn').addClass('disabled').text('Already claimed...');
+  // someone else responded to this request before you
+};
+
+var lockReleased = function(parsed) {
+  $('#' + uid).css('color', '');
+  $('#' + uid + ' .btn').removeClass('disabled').text('Respond to this!');
+  // TODO: test this...
+};
+
+var removeRequest = function(uid) {
+  console.log('remove ' + uid);
+  $('#' + uid).remove();
+};
+
+var addRequest = function(uid, name, issue) {
+  console.log('add request');
+  var elem = helpTemplate.format(uid, name, issue);
+  var new_node = $(elem).hide();
+  $("#all").prepend(new_node);
+  new_node.show('normal');
+}
 
 var getResponseLock = function(uid) {
   $('#' + uid + ' .btn').addClass('disabled').text('Checking...');
@@ -124,12 +153,13 @@ var cancelResponse = function(uid) {
     },
     'type': cancel
   }
+  return false;
 }
 
 var createNewMentor = function(form) {
+  console.log(form);
   setUserName($(form).find('#fullname').val());
   setUserEmail($(form).find('#email').val());
-  console.log($(form).find('input:checkbox:checked'));
   return false;
 };
 
