@@ -11,8 +11,8 @@ def handleMessage(msg, conn):
         if (iUtils.getQueue().get(msg.getUID()) != None ):
             conn.sendMessage("""
             { 
-            "type": "reply",
-            "body" : "You shouldn't spam the server" 
+            "type": "response",
+            "body" : "You shouldn't spam the server.  Please cancel and re-try the request" 
             }
             """.encode(encoding='UTF-8'))
         else:
@@ -80,7 +80,7 @@ def handleMessage(msg, conn):
             print("cant have it")
         print("help acknowleged")
 
-    elif mtype == "cancel":
+    elif mtype == "cancel": #a mentor retracts their block
         #the mentor dediced not to send their message
         if (msg.getContentValue('uid') != None):  
             targetQueuedItemUID = msg.getContent()['uid']
@@ -88,18 +88,28 @@ def handleMessage(msg, conn):
             targetQueuedItem.blocked = False
             del iUtils.locks[msg.getUID()]
             iUtils.groups['mentors'].sendAll(iUtils.lockResponse(targetQueuedItemUID, 'released'))
+            print("Mentor " + msg.getUID() + " Cancelled their block");
 
-    elif mtype == "response":
+    elif mtype == "respond": 
         print(msg.getContent())
         mentorUID = msg.getUID()
         targetQueuedItemUID = msg.getContent()['targetUID'];
-        targetQueuedItem = iUtils.getQueue()[targetQueuedItem]
+        targetQueuedItem = iUtils.getQueue()[targetQueuedItemUID]
 
         user = iUtils.getGroup("users").getMember(targetQueuedItemUID);
         #Dont need to check blocking.  If they send a helpResponse, they already asked for the lock
 
-    elif mtype == "remove":
-        del iUtils.requests[msg.getUID()]
+        #respond to the client here
+        #msg.type = "response";
+        user.send(msg)
+        try:
+            del iUtils.requests[targetQueuedItemUID]
+        except:
+            pass
+        iUtils.getGroup('mentors').sendAll(iUtils.removeRequest(targetQueuedItemUID))
+
+
+    elif mtype == "remove": # what happens when a client cancels their own request
         try:
             del iUtils.requests[msg.getUID()]
         except:
