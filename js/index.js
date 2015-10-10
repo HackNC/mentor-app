@@ -1,3 +1,14 @@
+String.prototype.hashCode = function(){
+  var hash = 0;
+  if (this.length == 0) return hash;
+  for (i = 0; i < this.length; i++) {
+    char = this.charCodeAt(i);
+    hash = ((hash<<5)-hash)+char;
+    hash = hash & hash; // Convert to 32bit integer
+  }
+  return hash;
+}
+
 // User function definitions
 var getUserID = function() {
   // this should always return the same value for the same device client.
@@ -104,7 +115,16 @@ var removeRequest = function(uid) {
 
 var addRequest = function(uid, name, issue, skills) {
   console.log('add request');
-  var elem = helpTemplate.format(uid, name, issue, skills);
+  console.log(skills);
+  var sk = "";
+  for(i=0;i<skills.length;i++){
+    if(skills[i] == ','){
+      sk = sk + " / ";
+    } else {
+      sk = sk + skills[i];
+    }
+  }
+  var elem = helpTemplate.format(uid, name, issue, sk);
   var new_node = $(elem).hide();
   $("#all").prepend(new_node);
   new_node.show('normal');
@@ -230,6 +250,21 @@ var helpTemplate = '<div class="panel panel-default" id="{0}"><div class="panel-
 var responseTemplate = '<form class="form-horizontal" onsubmit="respondToRequest(this, \'{0}\');" action=""><fieldset><div class="form-group"><label for="fullname" class="col-sm-2 control-label">Name:</label><div class="col-sm-10"><input type="text" id="fullname" class="form-control validate" placeholder="Jerry Berry" value="{1}"/></div></div><div class="form-group"><label for="email" class="col-sm-2 control-label">Email:</label><div class="col-sm-10"><input type="email" class="form-control validate" id="email" placeholder="me@company.com" value="{2}"/></div></div></div><div class="form-group"><label class="col-sm-2 control-label" for="responseText">Message </label><div class="col-sm-10"><textarea class="form-control" rows"3" id="responseText">Hey! I\'d be happy to help! Email me.</textarea></div></div><div class="form-group"><div class="col-sm-10 col-sm-offset-2"><button type="submit" class="btn btn-primary">Send</button><button type="button" onclick="cancelResponse(\'{0}\');" class="btn btn-danger">Cancel Edit</button><button type="reset" class="btn btn-warning" value="Reset" onclick="deleteMsg(\'{0}\')">Delete Message</button></div></div></fieldset></form>'
 
 $(document).ready(function(){
+  // var pass = document.cookie;
+  // if (pass == ""){
+  //   pass = prompt("Mentors Only! Password:" , "n/a");
+  // }
+  // if (pass.hashCode() == "-306314302"){
+  //   document.cookie = pass;
+  //   $("#page").show();
+  //   //init();
+  //   //if you are looking at this code, this solution isn't foolproof.
+  //   //If you would like to break this code, simply set a breakpoint and then redefine the hashCode prototype to return the correct string for any input.
+  //   //Don't do that.
+  // }
+  // else{
+  //   alert("Rejected");
+  // }
   init();
 });
 
